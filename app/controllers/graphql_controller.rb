@@ -4,6 +4,8 @@ class GraphqlController < AuthenticatedController
   # but you'll have to authenticate your user separately
   # protect_from_forgery with: :null_session
 
+  UPDATE_SCOPES_HEADER = 'X-Shopify-Insufficient-Scopes'
+
   def execute
     variables = ensure_hash(params[:variables])
     query = params[:query]
@@ -12,12 +14,15 @@ class GraphqlController < AuthenticatedController
       # Query context goes here, for example:
       # current_user: current_user,
     }
+    products = ShopifyAPI::Product.find(:all, params: { limit: 10 })
     result = NextGenAuthAppDemoSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     if result.to_h['data']['testField']['errors'].present?
       # Use the helper method available in the ShopifyApp::Authenticated concern
       signal_access_token_required
     end
     render json: result
+  rescue ActiveResource::ForbiddenAccess => e
+    response.set_header(UPDATE_SCOPES_HEADER, true)
   rescue => e
     raise e unless Rails.env.development?
     handle_error_in_development e

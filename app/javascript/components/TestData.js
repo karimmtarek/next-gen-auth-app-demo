@@ -9,7 +9,9 @@ const TEST_QUERY = gql`query { testField {
 }`;
 
 export default function TestData() {
-    const {loading, error, data} = useQuery(TEST_QUERY);
+    const result = useQuery(TEST_QUERY);
+    console.log(`RESULT ${result}`)
+    const {loading, error, data} = result
 
     if (loading) {
         return (

@@ -6,10 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     apiKey: data.apiKey,
     shopOrigin: data.shopOrigin
   });
+  window.shop = data.shopOrigin
 
   var actions = AppBridge.actions;
   var TitleBar = actions.TitleBar;
-  TitleBar.create(app, {
+  TitleBar.create(window.app, {
     title: data.page
   });
 });
