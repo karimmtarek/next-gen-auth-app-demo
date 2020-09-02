@@ -1,6 +1,7 @@
 SHOPIFY_SCOPES = %w(
   read_products
   read_themes
+  read_orders
 ).join(',')
 
 ShopifyApp.configure do |config|

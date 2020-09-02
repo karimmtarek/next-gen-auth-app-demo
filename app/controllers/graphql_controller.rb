@@ -23,6 +23,8 @@ class GraphqlController < AuthenticatedController
     render json: result
   rescue ActiveResource::ForbiddenAccess => e
     response.set_header(UPDATE_SCOPES_HEADER, true)
+  rescue ActiveResource::UnauthorizedAccess
+    signal_access_token_required
   rescue => e
     raise e unless Rails.env.development?
     handle_error_in_development e

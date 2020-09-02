@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_16_182005) do
+ActiveRecord::Schema.define(version: 2020_08_31_184902) do
 
   create_table "shops", force: :cascade do |t|
     t.string "shopify_domain", null: false
     t.string "shopify_token", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "scopes"
     t.index ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
   end
 

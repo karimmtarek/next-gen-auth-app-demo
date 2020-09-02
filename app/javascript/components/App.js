@@ -10,7 +10,7 @@ import TestData from './TestData'
 // eslint-disable-next-line sort-imports
 import {Redirect} from '@shopify/app-bridge/actions';
 
-function needsAuthorizationCode(response) {
+function needsScopesUpdate(response) {
   const headerValue = response.headers.get('X-Shopify-Insufficient-Scopes');
   if (headerValue) {
     return headerValue.toLowerCase() === 'true';
@@ -22,7 +22,7 @@ function customFetch({app, fetchOperation}) {
   return async (uri, options) => {
     const response = await fetchOperation(uri, options);
 
-    if (!needsAuthorizationCode(response)) {
+    if (!needsScopesUpdate(response)) {
       return response;
     }
 
@@ -30,7 +30,7 @@ function customFetch({app, fetchOperation}) {
 
     // Go to http://example.com with newContext
     redirect.dispatch(Redirect.Action.REMOTE, {
-      url: `https://f97b9527eb2a.ngrok.io/login?shop=${window.shop}`,
+      url: `https://${window.location.hostname}/login?shop=${window.shop}&return_to=${window.location.pathname}`,
     });
   };
 }
